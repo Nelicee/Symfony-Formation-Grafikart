@@ -21,7 +21,7 @@ class RecipeController extends AbstractController
     $recipes = $repository->findWithDurationLowerThan(80);
 
     return $this->render('recipe/index.html.twig', [
-      'recipes' => $recipes
+      'recipes' => $recipes 
     ]);
   }
 

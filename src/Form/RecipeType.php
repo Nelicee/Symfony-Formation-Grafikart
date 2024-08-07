@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -15,6 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Polyfill\Intl\Idn\Resources\unidata\Regex as UnidataRegex;
 
 class RecipeType extends AbstractType
@@ -22,15 +24,15 @@ class RecipeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title', Textype::class,[
+                'empty_data' => ''
+            ])
             ->add('slug', TextType::class, [
                 'required' => false,
-                'constraints'=> [
-                new Length(min: 10),
-                new Regex('/^[a-z0-9]+(?:- [a-z0-9]+)*$/', message: "Ceci n'est pas un slug valide")
-                ]
             ])
-            ->add('content')
+            ->add('content', TextareaType::class, [
+                'empty_data' => ''
+            ])
             ->add('duration')
             ->add('save', SubmitType::class, ['label' => 'Envoyer'])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
