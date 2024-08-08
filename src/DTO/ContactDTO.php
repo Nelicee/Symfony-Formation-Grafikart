@@ -1,0 +1,25 @@
+<?php
+
+namespace App\DTO;
+use Symfony\Component\Validator\Constraints as assert;
+
+
+class  ContactDTO
+{
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 200)]
+    
+    public string $name = '';
+    
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public string $email = '';
+    
+    
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 200)]
+    public string $message = '';
+
+    public string $service= '';
+
+}
