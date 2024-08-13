@@ -2,9 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
+use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
+use ContainerHxmXM4l\getDoctrine_Orm_DefaultEntityManager_PropertyInfoExtractorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,12 +21,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RecipeController extends AbstractController
 {
   #[Route('/', name: 'index')]
-  public function index(RecipeRepository $repository,): Response
+  public function index(RecipeRepository $repository, CategoryRepository $categoryRepository, EntityManagerInterface $entityManager): Response
   {
-    $recipes = $repository->findWithDurationLowerThan(80);
 
+    $recipes = $repository->findWithDurationLowerThan(80);
+    $entityManager->flush();
     return $this->render('admin/recipe/index.html.twig', [
-      'recipes' => $recipes 
+      'recipes' => $recipes
     ]);
   }
   #[Route('/create', name: 'create')]
@@ -43,7 +47,7 @@ class RecipeController extends AbstractController
     return  $this->render('admin/recipe/create.html.twig', ['form' => $form]);
   }
 
-  
+
   #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
   public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em)
   {

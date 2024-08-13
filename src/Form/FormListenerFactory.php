@@ -20,7 +20,7 @@ public function __construct(private SluggerInterface $slugger)
         return function (PreSubmitEvent $event) use ($field) {
             $data = $event->getData();
             if (empty($data['slug'])) {
-                $slugger = new AsciiSlugger();
+                //  
                 $data['slug'] = strtolower($this->slugger->slug($data[$field]));
                 $event->setData($data);
             }
